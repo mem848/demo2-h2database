@@ -31,17 +31,20 @@ public class LaborController {
 
     //we're going to pass in path var and load it into id
     @GetMapping("/{id}")
-    public Optional<LaborEntity> getJob(@PathVariable int id)
+    public Optional<LaborEntity> getLabor(@PathVariable int id)
     {
         logger.debug("getting job");
         logger.trace("trace here");
         logger.error("logger error");
         logger.warn("logger warning");
+
+        //throw new NumberFormatException("Wrong Number");
+
         return laborRepository.findById(id);
     }
 
     @PostMapping("")
-    public LaborResponse insertJob(@RequestBody LaborRequest request)
+    public LaborResponse insertLabor(@RequestBody LaborRequest request)
     {
         //request to Labor
         Labor labor = mapper.fromRequestToLabor(request);
