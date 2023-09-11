@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-/////really need to commit to github!
+/////really need to commit to gitHub!
 @RequestMapping("labor")
 @RestController
 @RequiredArgsConstructor
