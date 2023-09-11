@@ -12,5 +12,5 @@ public class Labor {
     private float width;
     private float pricePerSqft;
     private int id;
-    private float price;
+    private float cost;
 }

@@ -16,8 +16,9 @@ public class LaborService {
 
     public LaborEntity setPrice(Labor labor)
     {
-        System.out.println("hello world");
-        labor.setPrice(labor.getLength()* labor.getWidth()*labor.getPricePerSqft());
+        System.out.println("set price before: "+labor.getCost());
+        labor.setCost(labor.getLength()* labor.getWidth()*labor.getPricePerSqft());
+        System.out.println("set price after: "+labor.getCost());
         LaborEntity entity = mapper.fromLaborToLaborEntity(labor);
         return repository.save(entity);
     }
