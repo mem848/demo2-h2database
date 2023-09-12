@@ -1,10 +1,8 @@
 package com.sherwin.demo2.service;
 
-import com.sherwin.demo2.domain.Material;
+import com.sherwin.demo2.infrastructure.Material;
 import com.sherwin.demo2.domain.entity.MaterialEntity;
-import com.sherwin.demo2.domain.repository.LaborRepository;
 import com.sherwin.demo2.domain.repository.MaterialRespository;
-import com.sherwin.demo2.rest.resources.mappers.LaborMapper;
 import com.sherwin.demo2.rest.resources.mappers.MaterialMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

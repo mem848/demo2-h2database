@@ -16,18 +16,18 @@ import java.util.Date;
 public class LaborEntity { //this represents one entry in the labor repository
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SerializedName(value = "LaborId", alternate = "LaborId")
-    @Column(name="Id")
-    public Integer Id;
+    //@SerializedName(value = "LaborId", alternate = "LaborId")
+    @Column(name="id")
+    public int id;
 
-    @Column(name="CreatedAt")
+    @Column(name="created_at")
     @CreationTimestamp
-    public Date time_stamp;
+    public Date createdAt;
 
-    @Column(name="Length")
+    @Column(name="length")
     public double length;
 
-    @Column(name="Width")
+    @Column(name="width")
     public double width;
 
     @Column(name="price_per_sqft")

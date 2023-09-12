@@ -1,6 +1,6 @@
 package com.sherwin.demo2.service;
 
-import com.sherwin.demo2.domain.Labor;
+import com.sherwin.demo2.infrastructure.Labor;
 import com.sherwin.demo2.domain.entity.LaborEntity;
 import com.sherwin.demo2.domain.repository.LaborRepository;
 import com.sherwin.demo2.rest.resources.mappers.LaborMapper;

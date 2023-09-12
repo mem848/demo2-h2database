@@ -1,6 +1,6 @@
 package com.sherwin.demo2.rest;
 
-import com.sherwin.demo2.domain.Labor;
+import com.sherwin.demo2.infrastructure.Labor;
 import com.sherwin.demo2.domain.entity.LaborEntity;
 import com.sherwin.demo2.domain.repository.LaborRepository;
 import com.sherwin.demo2.rest.resources.mappers.LaborMapper;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 /////really need to commit to gitHub!
-@RequestMapping("labor")
+@RequestMapping("labors")
 @RestController
 @RequiredArgsConstructor
 @Component

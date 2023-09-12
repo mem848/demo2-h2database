@@ -1,4 +1,4 @@
-package com.sherwin.demo2.domain;
+package com.sherwin.demo2.infrastructure;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

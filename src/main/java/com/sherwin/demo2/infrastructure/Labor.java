@@ -1,4 +1,4 @@
-package com.sherwin.demo2.domain;
+package com.sherwin.demo2.infrastructure;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,5 @@ public class Labor {
     private float length;
     private float width;
     private float pricePerSqft;
-    private int id;
     private float cost;
 }

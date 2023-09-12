@@ -1,6 +1,6 @@
 package com.sherwin.demo2.rest.resources.mappers;
 
-import com.sherwin.demo2.domain.Material;
+import com.sherwin.demo2.infrastructure.Material;
 import com.sherwin.demo2.domain.entity.MaterialEntity;
 import com.sherwin.demo2.rest.resources.v1.MaterialRequest;
 import com.sherwin.demo2.rest.resources.v1.MaterialResponse;

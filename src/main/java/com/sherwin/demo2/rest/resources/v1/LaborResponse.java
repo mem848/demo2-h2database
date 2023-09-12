@@ -9,8 +9,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LaborResponse {
-    private double id;
-    private Date time_stamp;
+    private int id;
+    private Date createdAt;
     private double length;
     private double width;
     private double pricePerSqft;
