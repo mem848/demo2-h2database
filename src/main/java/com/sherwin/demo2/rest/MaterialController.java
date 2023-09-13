@@ -7,6 +7,7 @@ import com.sherwin.demo2.domain.repository.MaterialRespository;
 import com.sherwin.demo2.rest.resources.v1.MaterialRequest;
 import com.sherwin.demo2.rest.resources.v1.MaterialResponse;
 import com.sherwin.demo2.service.MaterialService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class MaterialController {
     }
 
     @PostMapping("")
-    public MaterialResponse insertMaterial(@RequestBody MaterialRequest request)
+    public MaterialResponse insertMaterial(@Valid @RequestBody MaterialRequest request)
     {
         //request to material
         Material material = mapper.fromRequestToMaterial(request);

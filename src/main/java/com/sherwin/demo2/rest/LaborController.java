@@ -7,6 +7,7 @@ import com.sherwin.demo2.rest.resources.mappers.LaborMapper;
 import com.sherwin.demo2.rest.resources.v1.LaborRequest;
 import com.sherwin.demo2.rest.resources.v1.LaborResponse;
 import com.sherwin.demo2.service.LaborService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class LaborController {
     }
 
     @PostMapping("")
-    public LaborResponse insertLabor(@RequestBody LaborRequest request)
+    public LaborResponse insertLabor(@Valid @RequestBody LaborRequest request)
     {
         //request to Labor
         Labor labor = mapper.fromRequestToLabor(request);
