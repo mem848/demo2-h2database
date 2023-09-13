@@ -17,13 +17,13 @@ import java.util.Date;
 public class MaterialEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SerializedName(value = "MaterialID", alternate = "materialId")
-    @Column(name="Id")
-    public Integer Id;
+   // @SerializedName(value = "MaterialID", alternate = "materialId")
+    @Column(name="id")
+    public Integer id;
 
     @Column(name="created_at")
     @CreationTimestamp
-    public Date time_stamp;
+    public Date createdAt;
 
     @Column(name="length")
     public double length;
@@ -34,6 +34,6 @@ public class MaterialEntity {
     @Column(name="sqft_per_gallon")
     private double sqftPerGallon;
 
-    @Column(name="gallons-required")
-    public double gallons_required;
+    @Column(name="gallons_required")
+    public double gallonsRequired;
 }

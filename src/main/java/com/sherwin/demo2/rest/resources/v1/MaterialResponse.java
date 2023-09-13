@@ -10,9 +10,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class MaterialResponse {
     private double id;
-    private Date time_stamp;
+    private Date createdAt;
     private double length;
     private double width;
     private double sqftPerGallon;
-    private double gallons_required;
+    private double gallonsRequired;
 }

@@ -11,5 +11,5 @@ public class Material {
     private double length;
     private double width;
     private double sqftPerGallon;
-    private double gallons_required;
+    private double gallonsRequired;
 }

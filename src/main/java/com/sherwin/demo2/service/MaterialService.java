@@ -16,7 +16,7 @@ public class MaterialService {
 
     public MaterialEntity setGallonsRequired(Material material)
     {
-        material.setGallons_required(material.getLength()* material.getWidth()/material.getSqftPerGallon());
+        material.setGallonsRequired(material.getLength()* material.getWidth()/material.getSqftPerGallon());
         MaterialEntity entity = mapper.fromMaterialToMaterialEntity(material);
         return repository.save(entity);
     }
