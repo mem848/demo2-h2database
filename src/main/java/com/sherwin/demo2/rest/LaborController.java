@@ -44,6 +44,12 @@ public class LaborController {
         return laborRepository.findById(id);
     }
 
+    @GetMapping("all")
+    public Iterable<LaborEntity> getAllLabor()
+    {
+        return laborRepository.findAll();
+    }
+
     @PostMapping("")
     public LaborResponse insertLabor(@Valid @RequestBody LaborRequest request)
     {

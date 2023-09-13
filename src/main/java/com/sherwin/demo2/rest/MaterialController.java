@@ -32,6 +32,8 @@ public class MaterialController {
         return materialRepository.findById(id);
     }
 
+    @GetMapping("all")
+    public Iterable<MaterialEntity> getAllMaterial(){return materialRepository.findAll();}
     @PostMapping("")
     public MaterialResponse insertMaterial(@Valid @RequestBody MaterialRequest request)
     {
