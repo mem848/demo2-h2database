@@ -2,6 +2,7 @@ package com.sherwin.demo2.domain.entity;
 import com.google.gson.annotations.SerializedName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name="pep_labor")
 public class LaborEntity { //this represents one entry in the labor repository
@@ -18,7 +20,7 @@ public class LaborEntity { //this represents one entry in the labor repository
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //@SerializedName(value = "LaborId", alternate = "LaborId")
     @Column(name="id")
-    public int id;
+    public Integer id;
 
     @Column(name="created_at")
     @CreationTimestamp

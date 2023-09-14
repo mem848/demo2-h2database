@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,14 +33,12 @@ public class LaborController {
 
     //we're going to pass in path var and load it into id
     @GetMapping("/{id}")
-    public Optional<LaborEntity> getLabor(@PathVariable int id)
+    public Optional<LaborEntity> getLabor(@PathVariable Integer id)
     {
         logger.debug("getting job");
         logger.trace("trace here");
         logger.error("logger error");
         logger.warn("logger warning");
-
-        //throw new NumberFormatException("Wrong Number");
 
         return laborRepository.findById(id);
     }
@@ -50,6 +49,7 @@ public class LaborController {
         return laborRepository.findAll();
     }
 
+    @ResponseStatus(HttpStatus.CREATED) //message 201, labors put into repo
     @PostMapping("")
     public LaborResponse insertLabor(@Valid @RequestBody LaborRequest request)
     {

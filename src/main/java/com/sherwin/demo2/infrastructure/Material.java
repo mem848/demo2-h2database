@@ -10,12 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Material {
-    @Positive
     private double length;
-    @Positive
     private double width;
-    @Positive
     private double sqftPerGallon;
-    @Positive
     private double gallonsRequired;
 }

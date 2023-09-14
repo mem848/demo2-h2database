@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
@@ -21,12 +22,14 @@ public class DemoExceptionHandler {
                 request.getDescription(false));
         return new ResponseEntity<ErrorDetail>(errDetail, HttpStatus.BAD_REQUEST);
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected Map<String, String> handleConstraintViolation(MethodArgumentNotValidException ex, WebRequest request){
         Map<String,String> errorMap = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             errorMap.put(error.getField(),error.getDefaultMessage());
         });
+        //look in sets of errorDetail
         return errorMap;
     }
 }
