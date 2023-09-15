@@ -50,6 +50,12 @@ public class LaborController {
         return service.getAllLabor();
     }
 
+    @PutMapping("update")
+    public LaborEntity updateLabor(@Valid @RequestBody Integer id)
+    {//wait what should the parameter be? I need an Id to find the labor, but also need
+        //the param that should be updated as well
+        //I should
+    }
 
     @ResponseStatus(HttpStatus.CREATED) //message 201, labors put into repo
     @PostMapping("")

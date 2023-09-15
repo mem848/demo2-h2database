@@ -38,4 +38,9 @@ public class LaborService {
     {
         repository.deleteById(id);
     }
+
+    public Optional<LaborEntity> updateLabor(Integer id)
+    {
+        return repository.findById(id);
+    }
 }
