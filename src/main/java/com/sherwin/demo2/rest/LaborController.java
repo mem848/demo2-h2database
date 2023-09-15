@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-/////really need to commit to gitHub!
 @RequestMapping("labors")
 @RestController
 @RequiredArgsConstructor
@@ -32,22 +31,25 @@ public class LaborController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     //we're going to pass in path var and load it into id
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     public Optional<LaborEntity> getLabor(@PathVariable Integer id)
     {
-        logger.debug("getting job");
-        logger.trace("trace here");
-        logger.error("logger error");
-        logger.warn("logger warning");
+        return service.getLabor(id);
+    }
 
-        return laborRepository.findById(id);
+    @DeleteMapping("delete/{id}")
+    public void deleteLabor(@PathVariable Integer id)
+    {
+        service.deleteLabor(id);
     }
 
     @GetMapping("all")
     public Iterable<LaborEntity> getAllLabor()
     {
-        return laborRepository.findAll();
+        //create service method, that returns all labors here
+        return service.getAllLabor();
     }
+
 
     @ResponseStatus(HttpStatus.CREATED) //message 201, labors put into repo
     @PostMapping("")
