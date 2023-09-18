@@ -39,8 +39,14 @@ public class LaborService {
         repository.deleteById(id);
     }
 
-    public Optional<LaborEntity> updateLabor(Integer id)
+    public LaborEntity updateLabor(LaborEntity currentLabor, Labor updateLabor)
     {
-        return repository.findById(id);
+        //here we update all labor fields
+        currentLabor.setLength(updateLabor.getLength());
+        currentLabor.setWidth(updateLabor.getWidth());
+        currentLabor.setPricePerSqft(updateLabor.getPricePerSqft());
+        currentLabor.setCost(currentLabor.getLength()*currentLabor.getWidth()*currentLabor.getPricePerSqft());
+        //return
+        return currentLabor;
     }
 }

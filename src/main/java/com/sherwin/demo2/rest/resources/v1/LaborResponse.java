@@ -14,6 +14,7 @@ import java.util.Date;
 public class LaborResponse {
     private Integer id;
     private Date createdAt;
+    private Date updatedAt;
     @Positive
     private double length;
     @Positive

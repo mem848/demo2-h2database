@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -25,6 +26,10 @@ public class LaborEntity { //this represents one entry in the labor repository
     @Column(name="created_at")
     @CreationTimestamp
     public Date createdAt;
+
+    @Column(name="updated_at")
+    @UpdateTimestamp
+    public Date updatedAt;
 
     @Column(name="length")
     public double length;

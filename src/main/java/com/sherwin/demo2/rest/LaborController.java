@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.Optional;
 @RequestMapping("labors")
@@ -50,11 +52,18 @@ public class LaborController {
         return service.getAllLabor();
     }
 
-    @PutMapping("update")
-    public LaborEntity updateLabor(@Valid @RequestBody Integer id)
-    {//wait what should the parameter be? I need an Id to find the labor, but also need
-        //the param that should be updated as well
-        //I should
+    @PutMapping("update/{id}")
+    public LaborEntity updateLabor(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
+    {
+        //first we check id to see if it's already in the table
+        LaborEntity currentLabor = getLabor(id)
+                .orElseThrow(NumberFormatException::new);
+
+            //now call service method to update all fields
+            //probably shouldn't send over request
+            Labor updateLabor = mapper.fromRequestToLabor(laborRequest);
+            service.updateLabor(currentLabor, updateLabor);
+        return currentLabor; //return currentLabor (updated if in table), exception if not in table
     }
 
     @ResponseStatus(HttpStatus.CREATED) //message 201, labors put into repo
