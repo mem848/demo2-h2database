@@ -211,28 +211,27 @@ public class ControllerTests {
     public void given_id_and_labor_request_update_labor() throws Exception
     {
         Integer id = 1;
-        Date createdAt = new Date();
-        Date updatedAt = new Date();
         double len = 14;
         double wid = 12;
         double pps = 2.5;
         double cost = 420;
-        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
+        LaborEntity entity = LaborEntity.builder()
+                .length(len).width(wid).pricePerSqft(pps).cost(cost).build();
+
         repository.save(entity);
 
         double len2 = 10;
         double wid2 = 10;
         double pps2 = 5;
         double cost2 = 500;
-        Labor labor = new Labor(10,10,5, 500);
-
-        LaborEntity entity2 = new LaborEntity(id, createdAt, updatedAt, len2, wid2, pps2, cost2);
+        Labor labor = Labor.builder()
+                        .length(len2).width(wid2).pricePerSqft(pps2).cost(cost2).build();
 
         System.out.println(entity);
         System.out.println(labor);
 
-        given(laborService.updateLabor(Optional.of(entity), labor)).willReturn(Optional.of(entity2));
-        System.out.println(entity2);
+        given(laborService.updateLabor(Optional.of(entity), labor)).willReturn(Optional.of(entity));
+        System.out.println(entity); //this isn't updating...
 
         this.mvc.perform(put("/labors/update/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
