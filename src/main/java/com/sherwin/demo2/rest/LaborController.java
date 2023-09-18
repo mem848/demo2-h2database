@@ -40,9 +40,9 @@ public class LaborController {
     }
 
     @DeleteMapping("delete/{id}")
-    public void deleteLabor(@PathVariable Integer id)
+    public Optional<LaborEntity> deleteLabor(@PathVariable Integer id)
     {
-        service.deleteLabor(id);
+        return service.deleteLabor(id);
     }
 
     @GetMapping("all")
@@ -53,18 +53,34 @@ public class LaborController {
     }
 
     @PutMapping("update/{id}")
-    public LaborEntity updateLabor(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
+    public Optional<LaborEntity> updateLabor(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
+    {
+        //first we check id to see if it's already in the table
+        Optional<LaborEntity> currentLabor = getLabor(id);
+        if(currentLabor.isPresent()){
+            Labor updateLabor = mapper.fromRequestToLabor(laborRequest); //create labor object
+            service.updateLabor(currentLabor, updateLabor); //call service methods to update laborEntity
+        }
+        currentLabor.orElseThrow();
+        return currentLabor; //return currentLabor
+
+    }
+
+    @PutMapping("update2/{id}") //works the same as update (up above, just throws error earlier if trying to update
+    //labor that isn't in the table
+    public LaborEntity updateLabor2(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
     {
         //first we check id to see if it's already in the table
         LaborEntity currentLabor = getLabor(id)
-                .orElseThrow(NumberFormatException::new);
+            .orElseThrow();
+        //throw exception if not in table, can customize later
 
-            //now call service method to update all fields
-            //probably shouldn't send over request
-            Labor updateLabor = mapper.fromRequestToLabor(laborRequest);
-            service.updateLabor(currentLabor, updateLabor);
-        return currentLabor; //return currentLabor (updated if in table), exception if not in table
+        //now call service method to update all fields
+        Labor updateLabor = mapper.fromRequestToLabor(laborRequest);
+        service.updateLabor2(currentLabor, updateLabor);
+        return currentLabor; //return currentLabor
     }
+
 
     @ResponseStatus(HttpStatus.CREATED) //message 201, labors put into repo
     @PostMapping("")

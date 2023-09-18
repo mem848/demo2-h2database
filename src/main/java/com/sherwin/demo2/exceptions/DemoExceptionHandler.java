@@ -11,6 +11,8 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class DemoExceptionHandler {
     @ExceptionHandler(NumberFormatException.class)
@@ -22,6 +24,19 @@ public class DemoExceptionHandler {
                 request.getDescription(false));
         return new ResponseEntity<ErrorDetail>(errDetail, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ErrorDetail> NoSuchElementException(NoSuchElementException ex)
+    {
+        ErrorDetail errDetail = new ErrorDetail(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                "check that the labor you are trying to update exists in the table"
+        );
+        return new ResponseEntity<ErrorDetail>(errDetail, HttpStatus.BAD_REQUEST);
+    }
+
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected Map<String, String> handleConstraintViolation(MethodArgumentNotValidException ex, WebRequest request){

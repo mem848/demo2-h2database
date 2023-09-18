@@ -2,6 +2,7 @@ package com.sherwin.demo2.RestTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sherwin.demo2.domain.entity.LaborEntity;
+import com.sherwin.demo2.domain.repository.LaborRepository;
 import com.sherwin.demo2.infrastructure.Labor;
 import com.sherwin.demo2.rest.resources.mappers.LaborMapper;
 import com.sherwin.demo2.rest.resources.mappers.MaterialMapper;
@@ -22,10 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Date;
+import java.util.Optional;
+
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ControllerTests {
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private LaborRepository repository;
 
     @MockBean
     private LaborMapper mockLaborMapper;
@@ -55,9 +61,7 @@ public class ControllerTests {
         this.objectMapper = new ObjectMapper();
     }
 
-    @Test
-    //@RunWith(MockitoJUnitRunner.class)
-    //could be an issue with how I imported some static methods?
+    @Test //this test is testing the post_mapping call in the laborController
     public void given_labor_request_return_labor_response() throws Exception
     {
         double len = 14;
@@ -94,4 +98,151 @@ public class ControllerTests {
 
     }
 
+    @Test //this is testing get_mapping call in laborController
+    public void given_id_return_labor() throws Exception
+    { //how to test @get mapping in controller
+        //first insert real data labor, then try to get laborEntity back
+        Integer id = 1;
+        Date createdAt = new Date();
+        Date updatedAt = new Date();
+        double len = 14;
+        double wid = 12;
+        double pps = 2.5;
+        double cost = 420;
+
+        //since I'm building out the entire entity, I'm just using the constructor, rather than build
+        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
+        repository.save(entity);
+        System.out.println(entity);
+
+        given(laborService.getLabor(id)).willReturn(Optional.of(entity));
+
+        this.mvc.perform(get("/labors/get/1")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json value back
+                        .content(objectMapper.writeValueAsString(entity))) //we expect variable entity in return
+                .andExpect(status().isOk()) //expect status 200 aka Okay
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
+                //.andExpect(MockMvcResultMatchers.jsonPath("createdAt").value(createdAt))
+                //dates can't be converted to string
+                //.andExpect(MockMvcResultMatchers.jsonPath("updatedAt").value(updatedAt))
+                .andExpect(MockMvcResultMatchers.jsonPath("length").value(len))
+                .andExpect(MockMvcResultMatchers.jsonPath("width").value(wid))
+                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(pps))
+                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(cost));
+    }
+
+    @Test //this will test delete method in laborController
+    public void given_id_delete_labor_from_database() throws Exception
+    {
+        Integer id = 1;
+        Date createdAt = new Date();
+        Date updatedAt = new Date();
+        double len = 14;
+        double wid = 12;
+        double pps = 2.5;
+        double cost = 420;
+        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
+        repository.save(entity);
+        System.out.println(entity);
+
+        given(laborService.deleteLabor(id)).willReturn(Optional.of(entity)); //sends back deleted entity
+
+        this.mvc.perform(delete("/labors/delete/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
+                .content(objectMapper.writeValueAsString(entity))) //we expect variable entity in return
+                .andExpect(status().isOk()) //expect status 200 aka Okay
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("length").value(len))
+                .andExpect(MockMvcResultMatchers.jsonPath("width").value(wid))
+                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(pps))
+                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(cost));
+
+    }
+
+    @Test //test returning all labor in table
+    public void return_all_labor_in_table() throws Exception
+    {
+        Integer id = 1;
+        Date createdAt = new Date();
+        Date updatedAt = new Date();
+        double len = 14;
+        double wid = 12;
+        double pps = 2.5;
+        double cost = 420;
+        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
+        repository.save(entity);
+
+        id = 2;
+        createdAt = new Date();
+        updatedAt = new Date();
+        len = 10;
+        wid = 10;
+        pps = 5;
+        cost = 500;
+        LaborEntity entity2 = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
+        repository.save(entity2);
+
+        id = 3;
+        createdAt = new Date();
+        updatedAt = new Date();
+        len = 1;
+        wid = 1;
+        pps = 1;
+        cost = 1;
+        LaborEntity entity3 = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
+        repository.save(entity3);
+
+        System.out.println(entity);
+        System.out.println(entity2);
+        System.out.println(entity3);
+
+        Iterable<LaborEntity> laborList = repository.findAll();
+
+        given(laborService.getAllLabor()).willReturn(laborList);
+
+        this.mvc.perform(get("/labors/all")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
+                        .content(objectMapper.writeValueAsString(laborList))) //we expect variable entity in return
+                .andExpect(status().isOk()); //expect status 200 aka Okay
+
+    }
+
+    @Test
+    public void given_id_and_labor_request_update_labor() throws Exception
+    {
+        Integer id = 1;
+        Date createdAt = new Date();
+        Date updatedAt = new Date();
+        double len = 14;
+        double wid = 12;
+        double pps = 2.5;
+        double cost = 420;
+        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
+        repository.save(entity);
+
+        double len2 = 10;
+        double wid2 = 10;
+        double pps2 = 5;
+        double cost2 = 500;
+        Labor labor = new Labor(10,10,5, 500);
+
+        LaborEntity entity2 = new LaborEntity(id, createdAt, updatedAt, len2, wid2, pps2, cost2);
+
+        System.out.println(entity);
+        System.out.println(labor);
+
+        given(laborService.updateLabor(Optional.of(entity), labor)).willReturn(Optional.of(entity2));
+        System.out.println(entity2);
+
+        this.mvc.perform(put("/labors/update/1")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
+                        .content(objectMapper.writeValueAsString(entity))) //we expect variable entity in return
+                .andExpect(status().isOk()) //expect status 200 aka Okay
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("length").value(len))
+                .andExpect(MockMvcResultMatchers.jsonPath("width").value(wid))
+                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(pps))
+                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(cost));
+
+    }
 }
