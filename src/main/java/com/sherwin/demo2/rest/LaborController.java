@@ -53,16 +53,19 @@ public class LaborController {
     }
 
     @PutMapping("update/{id}")
-    public Optional<LaborEntity> updateLabor(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
+    public LaborResponse updateLabor(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
     {
         //first we check id to see if it's already in the table
-        Optional<LaborEntity> currentLabor = getLabor(id);
+        Optional<LaborEntity> currentLabor = service.getLabor(id);
         if(currentLabor.isPresent()){
             Labor updateLabor = mapper.fromRequestToLabor(laborRequest); //create labor object
             service.updateLabor(currentLabor, updateLabor); //call service methods to update laborEntity
         }
         currentLabor.orElseThrow();
-        return currentLabor; //return currentLabor
+        LaborResponse response = null;
+        //look into Optional mapping because ifPresent is always void
+        currentLabor.ifPresent(labor -> mapper.fromLaborEntityToResponse(labor));
+        return mapper.fromOptionalLaborEntity(currentLabor);
 
     }
 

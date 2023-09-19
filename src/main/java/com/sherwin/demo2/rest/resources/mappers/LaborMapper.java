@@ -5,10 +5,14 @@ import com.sherwin.demo2.domain.entity.LaborEntity;
 import com.sherwin.demo2.rest.resources.v1.LaborRequest;
 import com.sherwin.demo2.rest.resources.v1.LaborResponse;
 
+import java.util.Optional;
+
 @Mapper(componentModel = "spring")
 public interface LaborMapper {
 
     Labor fromRequestToLabor(LaborRequest request);
     LaborEntity fromLaborToLaborEntity(Labor labor);
     LaborResponse fromLaborEntityToResponse(LaborEntity entity);
+
+    LaborResponse fromOptionalLaborEntity(Optional<LaborEntity> entity);
 }
