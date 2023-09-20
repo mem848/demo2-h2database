@@ -64,21 +64,29 @@ public class LaborController {
 //        return currentLabor;
 //
 //    }
+//
+//    @PutMapping("/{id}") //works the same as update (up above, just throws error earlier if trying to update
+//    //labor that isn't in the table
+//    public LaborResponse updateLabor(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
+//    {
+//        //first we check id to see if it's already in the table
+//        LaborEntity currentLabor = service.getLabor(id)
+//            .orElseThrow();
+//        //throw exception if not in table, can customize later
+//
+//        //now call service method to update all fields
+//        Labor updateLabor = mapper.fromRequestToLabor(laborRequest);
+//        service.updateLabor(currentLabor, updateLabor);
+//
+//        return mapper.fromLaborEntityToResponse(currentLabor); //return currentLabor
+//    }
 
-    @PutMapping("/{id}") //works the same as update (up above, just throws error earlier if trying to update
-    //labor that isn't in the table
-    public LaborResponse updateLabor2(@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
+    @PutMapping("/{id}")
+    public LaborResponse updateLabor (@PathVariable Integer id, @Valid @RequestBody LaborRequest laborRequest)
     {
-        //first we check id to see if it's already in the table
-        LaborEntity currentLabor = service.getLabor(id)
-            .orElseThrow();
-        //throw exception if not in table, can customize later
-
-        //now call service method to update all fields
-        Labor updateLabor = mapper.fromRequestToLabor(laborRequest);
-        service.updateLabor(currentLabor, updateLabor);
-
-        return mapper.fromLaborEntityToResponse(currentLabor); //return currentLabor
+        Labor updateLabor = mapper.fromRequestToLabor(laborRequest); //make request into POJO labor
+        LaborEntity entity = service.updateLabor(id, updateLabor); //call service
+        return mapper.fromLaborEntityToResponse(entity); //return currentLabor
     }
 
 

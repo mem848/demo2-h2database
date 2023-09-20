@@ -41,14 +41,6 @@ public class LaborService {
         repository.deleteById(id);
         return deletedLabor;
     }
-
-    public LaborResponse mapFromOptional (Optional<LaborEntity> entity)
-    {
-        LaborResponse response = new LaborResponse();
-        entity.ifPresent(res -> res.setLength(entity.get().getLength()));
-        return response;
-
-    }
 //    public Optional<LaborEntity> updateLabor(Optional<LaborEntity> currentLabor, Labor updateLabor)
 //    {
 //        //here we update all labor fields
@@ -61,9 +53,20 @@ public class LaborService {
 //        currentLabor.ifPresent(labor -> repository.save(labor));
 //        return currentLabor;
 //    }
+//
+//    public LaborEntity updateLabor(LaborEntity currentLabor, Labor updateLabor)
+//    {
+//        currentLabor.setLength(updateLabor.getLength());
+//        currentLabor.setWidth(updateLabor.getWidth());
+//        currentLabor.setPricePerSqft(updateLabor.getPricePerSqft());
+//        currentLabor.setCost(updateLabor.getLength()*updateLabor.getWidth()*updateLabor.getPricePerSqft());
+//        return repository.save(currentLabor);
+//    }
 
-    public LaborEntity updateLabor(LaborEntity currentLabor, Labor updateLabor)
+    public LaborEntity updateLabor(Integer id, Labor updateLabor)
     {
+        LaborEntity currentLabor = getLabor(id)
+                .orElseThrow(); //so by the time we get here, we know we have LaborEntity for sure
         currentLabor.setLength(updateLabor.getLength());
         currentLabor.setWidth(updateLabor.getWidth());
         currentLabor.setPricePerSqft(updateLabor.getPricePerSqft());

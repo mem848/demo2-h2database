@@ -1,4 +1,4 @@
-package com.sherwin.demo2.service.testDataGenerators.rest.resources;
+package com.sherwin.demo2.service.testDataGenerators.domain.entity;
 
 import com.sherwin.demo2.domain.entity.LaborEntity;
 

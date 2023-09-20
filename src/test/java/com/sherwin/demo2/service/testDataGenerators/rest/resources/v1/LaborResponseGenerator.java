@@ -1,4 +1,4 @@
-package com.sherwin.demo2.service.testDataGenerators.rest.resources;
+package com.sherwin.demo2.service.testDataGenerators.rest.resources.v1;
 
 import com.sherwin.demo2.rest.resources.v1.LaborResponse;
 import org.springframework.web.bind.annotation.PathVariable;

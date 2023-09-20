@@ -1,4 +1,4 @@
-package com.sherwin.demo2.service.testDataGenerators.rest.resources;
+package com.sherwin.demo2.service.testDataGenerators.infrastructure;
 
 import com.sherwin.demo2.infrastructure.Labor;
 

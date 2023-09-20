@@ -12,9 +12,11 @@ import com.sherwin.demo2.service.LaborService;
 import com.sherwin.demo2.service.MaterialService;
 //import org.junit.Before;
 //import org.junit.Test;
-import com.sherwin.demo2.service.testDataGenerators.rest.resources.LaborEntityGenerator;
-import com.sherwin.demo2.service.testDataGenerators.rest.resources.LaborGenerator;
-import com.sherwin.demo2.service.testDataGenerators.rest.resources.LaborRequestGenerator;
+import com.sherwin.demo2.service.testDataGenerators.domain.entity.LaborEntityGenerator;
+import com.sherwin.demo2.service.testDataGenerators.infrastructure.LaborGenerator;
+import com.sherwin.demo2.service.testDataGenerators.rest.resources.v1.LaborRequestGenerator;
+import com.sherwin.demo2.service.testDataGenerators.rest.resources.v1.LaborResponseGenerator;
+import jakarta.validation.constraints.Email;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,29 +38,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ControllerTests {
+public class LaborControllerTest {
     @Autowired
     private MockMvc mvc;
-
-    @Autowired
-    private LaborRepository repository;
-
-    @Autowired
-    private LaborService realService;
 
     @MockBean
     private LaborMapper mockLaborMapper;
 
     @MockBean
-    private MaterialMapper materialMapper;
+    private MaterialMapper mockMaterialMapper;
 
     @MockBean
-    private LaborService laborService;
+    private LaborService mockLaborService;
 
     @MockBean
-    private MaterialService materialService;
+    private MaterialService mockMaterialService;
 
     private ObjectMapper objectMapper;
+    @Autowired
+    private LaborRepository repository;
 
     @BeforeEach
     public void setUp()
@@ -69,23 +67,14 @@ public class ControllerTests {
     @Test //this test is testing the post_mapping call in the laborController
     public void given_labor_request_return_labor_response() throws Exception
     {
-        double len = 14;
-        double wid = 12;
-        double pps = 2.5;
-        double cost = 420;
-
         LaborRequest request = LaborRequestGenerator.getLaborRequest();
         Labor labor = LaborGenerator.getLabor();
         LaborEntity entity = LaborEntityGenerator.getLaborEntity();
-        LaborResponse response = LaborResponse.builder()
-                .id(1).length(len).width(wid).pricePerSqft(pps).cost(cost).build();
-        //System.out.println("request here "+request);
+        LaborResponse response = LaborResponseGenerator.getLaborResponse();
+
         given(mockLaborMapper.fromRequestToLabor(request)).willReturn(labor);
-        //System.out.println("post 1st mapping "+labor);
-        given(laborService.setPrice(labor)).willReturn(entity);
-        //System.out.println("post service "+entity);
+        given(mockLaborService.setPrice(labor)).willReturn(entity);
         given(mockLaborMapper.fromLaborEntityToResponse(entity)).willReturn(response);
-        //System.out.println("post response "+response);
 
         this.mvc.perform(post("/labors")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -93,69 +82,42 @@ public class ControllerTests {
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
-
-
     }
 
     @Test //this is testing get_mapping call in laborController
     public void given_id_return_labor() throws Exception
     { //how to test @get mapping in controller
         //first insert real data labor, then try to get laborEntity back
-        Integer id = 1;
-        Date createdAt = new Date();
-        Date updatedAt = new Date();
-        double len = 14;
-        double wid = 12;
-        double pps = 2.5;
-        double cost = 420;
+        LaborEntity entity = LaborEntityGenerator.getLaborEntity();
+        given(mockLaborService.getLabor(1)).willReturn(Optional.of(entity));
 
-        //since I'm building out the entire entity, I'm just using the constructor, rather than build
-        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
-        repository.save(entity);
-        System.out.println(entity);
-
-        given(laborService.getLabor(id)).willReturn(Optional.of(entity));
-
-        this.mvc.perform(get("/labors/get/1")
+        this.mvc.perform(get("/labors/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json value back
                         .content(objectMapper.writeValueAsString(entity))) //we expect variable entity in return
                 .andExpect(status().isOk()) //expect status 200 aka Okay
-                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
-                //.andExpect(MockMvcResultMatchers.jsonPath("createdAt").value(createdAt))
-                //dates can't be converted to string
-                //.andExpect(MockMvcResultMatchers.jsonPath("updatedAt").value(updatedAt))
-                .andExpect(MockMvcResultMatchers.jsonPath("length").value(len))
-                .andExpect(MockMvcResultMatchers.jsonPath("width").value(wid))
-                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(pps))
-                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(cost));
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("length").value(14))
+                .andExpect(MockMvcResultMatchers.jsonPath("width").value(12))
+                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(2.5))
+                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
     }
 
     @Test //this will test delete method in laborController
     public void given_id_delete_labor_from_database() throws Exception
     {
-        Integer id = 1;
-        Date createdAt = new Date();
-        Date updatedAt = new Date();
-        double len = 14;
-        double wid = 12;
-        double pps = 2.5;
-        double cost = 420;
-        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
-        repository.save(entity);
-        System.out.println(entity);
+        LaborEntity entity = LaborEntityGenerator.getLaborEntity();
 
-        given(laborService.deleteLabor(id)).willReturn(Optional.of(entity)); //sends back deleted entity
+        given(mockLaborService.deleteLabor(1)).willReturn(Optional.of(entity)); //sends back deleted entity
 
         this.mvc.perform(delete("/labors/delete/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
                 .content(objectMapper.writeValueAsString(entity))) //we expect variable entity in return
                 .andExpect(status().isOk()) //expect status 200 aka Okay
-                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
-                .andExpect(MockMvcResultMatchers.jsonPath("length").value(len))
-                .andExpect(MockMvcResultMatchers.jsonPath("width").value(wid))
-                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(pps))
-                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(cost));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("length").value(14))
+                .andExpect(MockMvcResultMatchers.jsonPath("width").value(12))
+                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(2.5))
+                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
     }
 
     @Test //test returning all labor in table
@@ -170,7 +132,6 @@ public class ControllerTests {
         double cost = 420;
         LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
         repository.save(entity);
-
         id = 2;
         createdAt = new Date();
         updatedAt = new Date();
@@ -180,7 +141,6 @@ public class ControllerTests {
         cost = 500;
         LaborEntity entity2 = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
         repository.save(entity2);
-
         id = 3;
         createdAt = new Date();
         updatedAt = new Date();
@@ -191,19 +151,44 @@ public class ControllerTests {
         LaborEntity entity3 = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
         repository.save(entity3);
 
-        System.out.println(entity);
-        System.out.println(entity2);
-        System.out.println(entity3);
+        Iterable<LaborEntity> entity4 = (Iterable<LaborEntity>) LaborEntityGenerator.getLaborEntity();
 
         Iterable<LaborEntity> laborList = repository.findAll();
 
-        given(laborService.getAllLabor()).willReturn(laborList);
+        given(mockLaborService.getAllLabor()).willReturn(entity4);
 
-        this.mvc.perform(get("/labors/all")
+        this.mvc.perform(get("/labors")
                         .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
-                        .content(objectMapper.writeValueAsString(laborList))) //we expect variable entity in return
+                        .content(objectMapper.writeValueAsString(entity4))) //we expect variable entity in return
                 .andExpect(status().isOk()); //expect status 200 aka Okay
 
+    }
+
+    @Test
+    public void given_id_and_labor_request_update_labor() throws Exception
+    {
+        Integer id = 1;
+        LaborRequest request = LaborRequestGenerator.getLaborRequest();
+        Labor labor = LaborGenerator.getLabor();
+        LaborEntity entity = LaborEntityGenerator.getLaborEntity();
+        LaborResponse response = LaborResponseGenerator.getLaborResponse();
+
+        //take request to POJO
+        given(mockLaborMapper.fromRequestToLabor(request)).willReturn(labor);
+        //go to service, get back laborEntity
+        given(mockLaborService.updateLabor(id, labor)).willReturn(entity);
+        //map to response
+        given(mockLaborMapper.fromLaborEntityToResponse(entity)).willReturn(response);
+
+        this.mvc.perform(put("/labors/1")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
+                        .content(objectMapper.writeValueAsString(request)))//we send request in body
+                  .andExpect(status().isOk())//expect status 200 aka Okay
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("length").value(14))
+                .andExpect(MockMvcResultMatchers.jsonPath("width").value(12))
+                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(2.5))
+                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
     }
 
 //    @Test

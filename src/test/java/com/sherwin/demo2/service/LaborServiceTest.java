@@ -1,4 +1,4 @@
 package com.sherwin.demo2.service;
 
-public class ServiceTests {
+public class LaborServiceTest {
 }
