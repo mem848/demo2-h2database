@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -24,6 +25,10 @@ public class MaterialEntity {
     @Column(name="created_at")
     @CreationTimestamp
     public Date createdAt;
+
+    @Column(name="updated_at")
+    @UpdateTimestamp
+    public Date updatedAt;
 
     @Column(name="length")
     public double length;

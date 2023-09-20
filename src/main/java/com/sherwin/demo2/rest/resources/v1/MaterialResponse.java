@@ -13,6 +13,7 @@ import java.util.Date;
 public class MaterialResponse {
     private double id;
     private Date createdAt;
+    private Date updatedAt;
     @Positive //must required a positive amount of paint required
     private double length;
     @Positive //must required a positive amount of paint required

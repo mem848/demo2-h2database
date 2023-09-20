@@ -1,4 +1,4 @@
-package com.sherwin.demo2.ExceptionTests;
+package com.sherwin.demo2.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sherwin.demo2.rest.resources.mappers.LaborMapper;

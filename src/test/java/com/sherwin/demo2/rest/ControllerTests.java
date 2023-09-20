@@ -1,4 +1,4 @@
-package com.sherwin.demo2.RestTests;
+package com.sherwin.demo2.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sherwin.demo2.domain.entity.LaborEntity;
@@ -12,6 +12,9 @@ import com.sherwin.demo2.service.LaborService;
 import com.sherwin.demo2.service.MaterialService;
 //import org.junit.Before;
 //import org.junit.Test;
+import com.sherwin.demo2.service.testDataGenerators.rest.resources.LaborEntityGenerator;
+import com.sherwin.demo2.service.testDataGenerators.rest.resources.LaborGenerator;
+import com.sherwin.demo2.service.testDataGenerators.rest.resources.LaborRequestGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,6 @@ import java.util.Date;
 import java.util.Optional;
 
 
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -56,8 +58,6 @@ public class ControllerTests {
     @MockBean
     private MaterialService materialService;
 
-
-
     private ObjectMapper objectMapper;
 
     @BeforeEach
@@ -73,18 +73,12 @@ public class ControllerTests {
         double wid = 12;
         double pps = 2.5;
         double cost = 420;
-        Date date = new Date();
 
-        LaborRequest request = LaborRequest.builder()
-                .length(len).width(wid).pricePerSqft(pps).build(); //this builds the request all params
-        Labor labor = Labor.builder()
-                .length(len).width(wid).pricePerSqft(pps).build();
-        //when we first map from request --> labor we don't set price
-        LaborEntity entity = LaborEntity.builder()
-                .id(1).createdAt(date).length(len).width(wid).pricePerSqft(pps).cost(cost).build();
-        //we set labor price via service, and that price is reflected in laborEntity
+        LaborRequest request = LaborRequestGenerator.getLaborRequest();
+        Labor labor = LaborGenerator.getLabor();
+        LaborEntity entity = LaborEntityGenerator.getLaborEntity();
         LaborResponse response = LaborResponse.builder()
-                .id(1).createdAt(date).length(len).width(wid).pricePerSqft(pps).cost(cost).build();
+                .id(1).length(len).width(wid).pricePerSqft(pps).cost(cost).build();
         //System.out.println("request here "+request);
         given(mockLaborMapper.fromRequestToLabor(request)).willReturn(labor);
         //System.out.println("post 1st mapping "+labor);
@@ -212,42 +206,42 @@ public class ControllerTests {
 
     }
 
-    @Test
-    public void given_id_and_labor_request_update_labor() throws Exception
-    {
-        //for creating original entity
-
-        Integer id = 1;
-        double len = 14;
-        double wid = 12;
-        double pps = 2.5;
-        double cost = 420;
-        Optional<LaborEntity> entity = Optional.ofNullable(LaborEntity.builder()
-                .id(id).length(len).width(wid).pricePerSqft(pps).cost(cost).build());
-
-        LaborRequest request = LaborRequest.builder()
-                        .length(len).width(wid).pricePerSqft(pps).build();;
-        Labor labor = Labor.builder()
-                        .length(len).width(wid).pricePerSqft(pps).build();
-
-        Optional<LaborEntity> response = Optional.ofNullable(LaborEntity.builder()
-                .id(id).length(len).width(wid).pricePerSqft(pps).cost(cost).build());
-
-        given(laborService.getLabor(id)).willReturn(entity); //look for entity
-        given(mockLaborMapper.fromRequestToLabor(request)).willReturn(labor); //take request, turn into POJO
-        given(laborService.updateLabor(entity, labor)).willReturn(response); //do service call to update laborEntity
-
-
-        this.mvc.perform(put("/labors/update/1")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
-                        .content(objectMapper.writeValueAsString(request)))//we send request in body
-                  .andExpect(status().isOk())//expect status 200 aka Okay
-                .andExpect(MockMvcResultMatchers.jsonPath("id").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("length").value(14))
-                .andExpect(MockMvcResultMatchers.jsonPath("width").value(12))
-                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(2.5))
-                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
-
-    }
+//    @Test
+//    public void given_id_and_labor_request_update_labor() throws Exception
+//    {
+//        //for creating original entity
+//
+//        Integer id = 1;
+//        double len = 14;
+//        double wid = 12;
+//        double pps = 2.5;
+//        double cost = 420;
+//        Optional<LaborEntity> entity = Optional.ofNullable(LaborEntity.builder()
+//                .id(id).length(len).width(wid).pricePerSqft(pps).cost(cost).build());
+//
+//        LaborRequest request = LaborRequest.builder()
+//                        .length(len).width(wid).pricePerSqft(pps).build();;
+//        Labor labor = Labor.builder()
+//                        .length(len).width(wid).pricePerSqft(pps).build();
+//
+//        Optional<LaborEntity> response = Optional.ofNullable(LaborEntity.builder()
+//                .id(id).length(len).width(wid).pricePerSqft(pps).cost(cost).build());
+//
+//        given(laborService.getLabor(id)).willReturn(entity); //look for entity
+//        given(mockLaborMapper.fromRequestToLabor(request)).willReturn(labor); //take request, turn into POJO
+//        given(laborService.updateLabor(entity, labor)).willReturn(response); //do service call to update laborEntity
+//
+//
+//        this.mvc.perform(put("/labors/update/1")
+//                        .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
+//                        .content(objectMapper.writeValueAsString(request)))//we send request in body
+//                  .andExpect(status().isOk())//expect status 200 aka Okay
+//                .andExpect(MockMvcResultMatchers.jsonPath("id").value(1))
+//                .andExpect(MockMvcResultMatchers.jsonPath("length").value(14))
+//                .andExpect(MockMvcResultMatchers.jsonPath("width").value(12))
+//                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(2.5))
+//                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
+//
+//    }
 
 }

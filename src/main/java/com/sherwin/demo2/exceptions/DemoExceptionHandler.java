@@ -28,14 +28,13 @@ public class DemoExceptionHandler {
     public ResponseEntity<ErrorDetail> NoSuchElementException(NoSuchElementException ex)
     {
         ErrorDetail errDetail = new ErrorDetail(
-                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.NOT_FOUND.value(),
                 new Date(),
                 ex.getMessage(),
                 "check that the labor you are trying to update exists in the table"
         );
-        return new ResponseEntity<ErrorDetail>(errDetail, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ErrorDetail>(errDetail, HttpStatus.NOT_FOUND);
     }
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

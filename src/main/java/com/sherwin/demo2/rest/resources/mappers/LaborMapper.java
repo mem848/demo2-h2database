@@ -13,6 +13,4 @@ public interface LaborMapper {
     Labor fromRequestToLabor(LaborRequest request);
     LaborEntity fromLaborToLaborEntity(Labor labor);
     LaborResponse fromLaborEntityToResponse(LaborEntity entity);
-
-    LaborResponse fromOptionalLaborEntity(Optional<LaborEntity> entity);
 }
