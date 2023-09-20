@@ -13,6 +13,7 @@ public class LaborResponseGenerator {
                 .pricePerSqft(2.5)
                 .cost(420)
                 .build();
+        return response;
     }
 }
 
