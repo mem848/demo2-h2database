@@ -27,7 +27,7 @@ public class LaborService {
     public double setCost(Labor labor)
     {
         labor.setCost(labor.getLength()* labor.getWidth()*labor.getPricePerSqft());
-        System.out.println(labor.getCost());
+       // System.out.println(labor.getCost());
         return labor.getCost();
     }
     public LaborEntity mapToEntity (Labor labor)
@@ -47,7 +47,8 @@ public class LaborService {
 
     public Optional<LaborEntity> getLabor(Integer id)
     {
-        return repository.findById(id);
+        Optional<LaborEntity> entity = repository.findById(id);
+        return entity;
     }
 
     public Optional<LaborEntity> deleteLabor(Integer id)
@@ -86,6 +87,7 @@ public class LaborService {
         currentLabor.setWidth(updateLabor.getWidth());
         currentLabor.setPricePerSqft(updateLabor.getPricePerSqft());
         currentLabor.setCost(updateLabor.getLength()*updateLabor.getWidth()*updateLabor.getPricePerSqft());
-        return repository.save(currentLabor);
+        repository.save(currentLabor);
+        return currentLabor;
     }
 }
