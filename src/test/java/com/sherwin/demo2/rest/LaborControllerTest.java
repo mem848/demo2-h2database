@@ -16,7 +16,6 @@ import com.sherwin.demo2.service.testDataGenerators.domain.entity.LaborEntityGen
 import com.sherwin.demo2.service.testDataGenerators.infrastructure.LaborGenerator;
 import com.sherwin.demo2.service.testDataGenerators.rest.resources.v1.LaborRequestGenerator;
 import com.sherwin.demo2.service.testDataGenerators.rest.resources.v1.LaborResponseGenerator;
-import jakarta.validation.constraints.Email;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -75,7 +73,7 @@ public class LaborControllerTest {
         LaborResponse response = LaborResponseGenerator.getLaborResponse();
 
         given(mockLaborMapper.fromRequestToLabor(request)).willReturn(labor);
-        given(mockLaborService.setPrice(labor)).willReturn(entity);
+        given(mockLaborService.createLaborEntity(labor)).willReturn(entity);
         given(mockLaborMapper.fromLaborEntityToResponse(entity)).willReturn(response);
 
         this.mvc.perform(post("/labors")

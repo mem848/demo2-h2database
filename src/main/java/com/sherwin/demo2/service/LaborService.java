@@ -4,7 +4,6 @@ import com.sherwin.demo2.infrastructure.Labor;
 import com.sherwin.demo2.domain.entity.LaborEntity;
 import com.sherwin.demo2.domain.repository.LaborRepository;
 import com.sherwin.demo2.rest.resources.mappers.LaborMapper;
-import com.sherwin.demo2.rest.resources.v1.LaborResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +17,28 @@ public class LaborService {
     @Autowired
     private LaborMapper mapper;
 
-    public LaborEntity setPrice(Labor labor)
+    public LaborEntity createLaborEntity(Labor labor)
+    {
+        setCost(labor); //set cost of labor
+        LaborEntity entity = mapToEntity(labor);
+        return saveToRepository(entity);
+    }
+
+    public double setCost(Labor labor)
     {
         labor.setCost(labor.getLength()* labor.getWidth()*labor.getPricePerSqft());
-        LaborEntity entity = mapper.fromLaborToLaborEntity(labor);
+        System.out.println(labor.getCost());
+        return labor.getCost();
+    }
+    public LaborEntity mapToEntity (Labor labor)
+    {
+        return mapper.fromLaborToLaborEntity(labor);
+    }
+    public LaborEntity saveToRepository(LaborEntity entity)
+    {
         return repository.save(entity);
     }
+
 
     public Iterable<LaborEntity> getAllLabor()
     {

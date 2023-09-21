@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.Optional;
 @RequestMapping("labors")
@@ -97,7 +95,7 @@ public class LaborController {
         //request to Labor
         Labor labor = mapper.fromRequestToLabor(request);
         //set price, and save entity to repository
-        LaborEntity entity = service.setPrice(labor);
+        LaborEntity entity = service.createLaborEntity(labor);
         return mapper.fromLaborEntityToResponse(entity);
     }
 }
