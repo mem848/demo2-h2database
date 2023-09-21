@@ -27,7 +27,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -123,45 +125,20 @@ public class LaborControllerTest {
     @Test //test returning all labor in table
     public void return_all_labor_in_table() throws Exception
     {
-        Integer id = 1;
-        Date createdAt = new Date();
-        Date updatedAt = new Date();
-        double len = 14;
-        double wid = 12;
-        double pps = 2.5;
-        double cost = 420;
-        LaborEntity entity = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
-        repository.save(entity);
-        id = 2;
-        createdAt = new Date();
-        updatedAt = new Date();
-        len = 10;
-        wid = 10;
-        pps = 5;
-        cost = 500;
-        LaborEntity entity2 = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
-        repository.save(entity2);
-        id = 3;
-        createdAt = new Date();
-        updatedAt = new Date();
-        len = 1;
-        wid = 1;
-        pps = 1;
-        cost = 1;
-        LaborEntity entity3 = new LaborEntity(id, createdAt, updatedAt, len, wid, pps, cost);
-        repository.save(entity3);
+        Iterable<LaborEntity> laborList = new ArrayList<LaborEntity>() {
+            {
+                add(new LaborEntity(1, new Date(), new Date(), 13, 12, 3.5, 420));
+                add(new LaborEntity(2, new Date(), new Date(), 13, 12, 3.5, 420));
+                add(new LaborEntity(3, new Date(), new Date(), 13, 12, 3.5, 420));
+            }
+        };
 
-        Iterable<LaborEntity> entity4 = (Iterable<LaborEntity>) LaborEntityGenerator.getLaborEntity();
-
-        Iterable<LaborEntity> laborList = repository.findAll();
-
-        given(mockLaborService.getAllLabor()).willReturn(entity4);
+        given(mockLaborService.getAllLabor()).willReturn(laborList);
 
         this.mvc.perform(get("/labors")
                         .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
-                        .content(objectMapper.writeValueAsString(entity4))) //we expect variable entity in return
+                        .content(objectMapper.writeValueAsString(laborList)) )//we expect variable entity in return
                 .andExpect(status().isOk()); //expect status 200 aka Okay
-
     }
 
     @Test
