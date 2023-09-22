@@ -109,7 +109,7 @@ public class LaborControllerTest {
 
         given(mockLaborService.deleteLabor(1)).willReturn(Optional.of(entity)); //sends back deleted entity
 
-        this.mvc.perform(delete("/labors/delete/1")
+        this.mvc.perform(delete("/labors/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
                 .content(objectMapper.writeValueAsString(entity))) //we expect variable entity in return
                 .andExpect(status().isOk()) //expect status 200 aka Okay
@@ -165,43 +165,5 @@ public class LaborControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(2.5))
                 .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
     }
-
-//    @Test
-//    public void given_id_and_labor_request_update_labor() throws Exception
-//    {
-//        //for creating original entity
-//
-//        Integer id = 1;
-//        double len = 14;
-//        double wid = 12;
-//        double pps = 2.5;
-//        double cost = 420;
-//        Optional<LaborEntity> entity = Optional.ofNullable(LaborEntity.builder()
-//                .id(id).length(len).width(wid).pricePerSqft(pps).cost(cost).build());
-//
-//        LaborRequest request = LaborRequest.builder()
-//                        .length(len).width(wid).pricePerSqft(pps).build();;
-//        Labor labor = Labor.builder()
-//                        .length(len).width(wid).pricePerSqft(pps).build();
-//
-//        Optional<LaborEntity> response = Optional.ofNullable(LaborEntity.builder()
-//                .id(id).length(len).width(wid).pricePerSqft(pps).cost(cost).build());
-//
-//        given(laborService.getLabor(id)).willReturn(entity); //look for entity
-//        given(mockLaborMapper.fromRequestToLabor(request)).willReturn(labor); //take request, turn into POJO
-//        given(laborService.updateLabor(entity, labor)).willReturn(response); //do service call to update laborEntity
-//
-//
-//        this.mvc.perform(put("/labors/update/1")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE) //expecting json back
-//                        .content(objectMapper.writeValueAsString(request)))//we send request in body
-//                  .andExpect(status().isOk())//expect status 200 aka Okay
-//                .andExpect(MockMvcResultMatchers.jsonPath("id").value(1))
-//                .andExpect(MockMvcResultMatchers.jsonPath("length").value(14))
-//                .andExpect(MockMvcResultMatchers.jsonPath("width").value(12))
-//                .andExpect(MockMvcResultMatchers.jsonPath("pricePerSqft").value(2.5))
-//                .andExpect(MockMvcResultMatchers.jsonPath("cost").value(420));
-//
-//    }
 
 }
