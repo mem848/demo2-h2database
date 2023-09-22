@@ -57,27 +57,6 @@ public class LaborService {
         repository.deleteById(id);
         return deletedLabor;
     }
-//    public Optional<LaborEntity> updateLabor(Optional<LaborEntity> currentLabor, Labor updateLabor)
-//    {
-//        //here we update all labor fields
-//        //if I use a functional interface, I can only use one abstract method
-//        currentLabor.ifPresent(labor -> labor.setLength(updateLabor.getLength()));
-//        currentLabor.ifPresent(labor -> labor.setWidth(updateLabor.getWidth()));
-//        currentLabor.ifPresent(labor -> labor.setPricePerSqft(updateLabor.getPricePerSqft()));
-//        currentLabor.ifPresent(labor
-//                -> labor.setCost(updateLabor.getLength()*updateLabor.getWidth()* updateLabor.getPricePerSqft()));
-//        currentLabor.ifPresent(labor -> repository.save(labor));
-//        return currentLabor;
-//    }
-//
-//    public LaborEntity updateLabor(LaborEntity currentLabor, Labor updateLabor)
-//    {
-//        currentLabor.setLength(updateLabor.getLength());
-//        currentLabor.setWidth(updateLabor.getWidth());
-//        currentLabor.setPricePerSqft(updateLabor.getPricePerSqft());
-//        currentLabor.setCost(updateLabor.getLength()*updateLabor.getWidth()*updateLabor.getPricePerSqft());
-//        return repository.save(currentLabor);
-//    }
 
     public LaborEntity updateLabor(Integer id, Labor updateLabor)
     {

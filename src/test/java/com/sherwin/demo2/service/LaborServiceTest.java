@@ -71,7 +71,6 @@ public class LaborServiceTest {
                 .cost(420)
                 .build();
         assertEquals(expected, actual);
-
     }
 
 }
